@@ -1,7 +1,7 @@
 ﻿@model List<sikayetvar.Models.Complaint>
 
 @{
-    ViewData["Title"] = "Şikayetler";
+    ViewData["Title"] = "Tüm Şikayetler";
 }
 
 <h2 class="mb-4">@ViewData["Title"]</h2>
@@ -36,6 +36,14 @@
                         </div>
                         <p class="text-muted" style="font-size: 0.9em;">@item.CreatedAt.ToString("dd MMM yyyy HH:mm")</p>
                         <p class="card-text">@item.Description?.Substring(0, Math.Min(100, item.Description.Length))...</p>
+                        <div class="d-flex align-items-center mt-2">
+                            @if (!string.IsNullOrEmpty(item.User?.ProfileImageUrl))
+                            {
+                                <img src="@item.User.ProfileImageUrl" alt="profil" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;" />
+                            }
+                            <span class="text-muted">@item.User?.FirstName @item.User?.LastName</span>
+                        </div>
+
                     </div>
                 </div>
             </a>

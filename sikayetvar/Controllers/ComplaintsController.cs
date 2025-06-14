@@ -26,6 +26,7 @@ namespace sikayetvar.Controllers
         {
             var approvedComplaints = await _context.Complaints
                 .Where(c => c.IsApproved)
+                .Include(c => c.User)
                 .OrderByDescending(c => c.CreatedAt)
                 .ToListAsync();
 
@@ -37,6 +38,7 @@ namespace sikayetvar.Controllers
             var user = await _userManager.GetUserAsync(User);
             var complaints = await _context.Complaints
                 .Where(c => c.UserId == user.Id)
+                .Include(c => c.User)
                 .OrderByDescending(c => c.CreatedAt)
                 .ToListAsync();
 

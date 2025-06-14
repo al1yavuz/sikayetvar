@@ -11,6 +11,24 @@
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h2>Yeni hesap oluştur</h2>
             <hr />
+            <div class="form-floating mb-3">
+                <input asp-for="Input.FirstName" class="form-control" placeholder="Adınız" />
+                <label asp-for="Input.FirstName">Ad</label>
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.LastName" class="form-control" placeholder="Soyadınız" />
+                <label asp-for="Input.LastName">Soyad</label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.ProfileImageUrl" class="form-control" placeholder="Profil Fotoğrafı URL (isteğe bağlı)" />
+                <label asp-for="Input.ProfileImageUrl">Profil Resmi URL</label>
+                <span asp-validation-for="Input.ProfileImageUrl" class="text-danger"></span>
+            </div>
+
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />

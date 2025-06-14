@@ -70,7 +70,7 @@ footer {
     border-radius: 8px;
 }
 .scroll-item .card {
-    height: 200px; /* Sabit yükseklik */
+    height: 200px; 
     overflow: hidden;
     transition: box-shadow 0.2s ease-in-out;
 }
@@ -100,7 +100,26 @@ footer {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    min-height: 2.8em; /* yaklaþýk 2 satýr yer kaplasýn */
+    min-height: 2.8em; 
+}
+
+.text-truncate-multiline {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 3em;
+}
+
+.card-title {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.scroll-item .card {
+    height: 200px;
+    transition: box-shadow 0.2s ease-in-out;
 }
 
 

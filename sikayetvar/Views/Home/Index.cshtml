@@ -4,15 +4,15 @@
 }
 
 <div class="text-center my-5">
-    <h1 class="display-4"><strong>Çözüm için</strong></h1>
-    <h1 class="display-4">Şikayetvar</h1>
+    <h1 class="display-4 fw-bold">Çözüm için</h1>
+    <h1 class="display-4 text-success">Şikayetvar</h1>
     <form asp-controller="Complaints" asp-action="Search" method="get" class="d-flex justify-content-center mt-4">
-        <input type="text" name="query" class="form-control w-50" placeholder="Marka, model, ürün ara" required />
-        <button type="submit" class="btn btn-success ms-2">Ara</button>
+        <input type="text" name="query" class="form-control w-50 rounded-pill px-4" placeholder="Marka, model, ürün ara" required />
+        <button type="submit" class="btn btn-success ms-2 px-4 rounded-pill">Ara</button>
     </form>
 </div>
 
-<h4 class="mt-5 mb-3 text-center">Gündemdeki şikayetler</h4>
+<h4 class="mt-5 mb-3 text-center fw-semibold">Gündemdeki Şikayetler</h4>
 
 <div class="scroll-container">
     <div class="scroll-track">
@@ -23,11 +23,19 @@
                 <a asp-controller="Complaints" asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none text-dark">
                     <div class="scroll-item">
                         <div class="card shadow-sm h-100 hover-shadow">
-                            <div class="card-body">
-                                <h6 class="card-title">@item.Title</h6>
-                                <p class="card-text text-muted">
-                                    @item.Description?.Substring(0, Math.Min(item.Description.Length, 80))...
+                            <div class="card-body d-flex flex-column">
+                                <h6 class="card-title fw-bold text-truncate">@item.Title</h6>
+                                <p class="card-text text-muted text-truncate-multiline">
+                                    @item.Description
                                 </p>
+
+                                <div class="d-flex align-items-center mt-auto pt-2">
+                                    @if (!string.IsNullOrEmpty(item.User?.ProfileImageUrl))
+                                    {
+                                        <img src="@item.User.ProfileImageUrl" alt="profil" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;" />
+                                    }
+                                    <small class="text-muted">@item.User?.FirstName @item.User?.LastName</small>
+                                </div>
                             </div>
                         </div>
                     </div>
