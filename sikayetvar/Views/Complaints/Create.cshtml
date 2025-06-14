@@ -1,0 +1,46 @@
+﻿@model sikayetvar.Models.Complaint
+@{
+    ViewData["Title"] = "Yeni Şikayet Oluştur";
+}
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+<form asp-action="Create" method="post" enctype="multipart/form-data" class="shadow p-4 rounded bg-light">
+    <div class="mb-3">
+        
+        <input asp-for="Title" class="form-control" placeholder="Başlık yazın. Örneğin: Ürün teslim edilmedi" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        
+        <textarea asp-for="Description" class="form-control" rows="5" placeholder="Şikayetinizi detaylıca açıklayınız."></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        
+        <div class="input-group">
+            <input type="text" name="imageUrl" class="form-control" placeholder="Resim URL’si (isteğe bağlı)" />
+            <input type="file" name="imageFile" class="form-control" />
+        </div>
+        <small class="form-text text-muted">URL girilebilir veya bilgisayardan yüklenebilir. </small>
+    </div>
+
+    <button type="submit" class="btn btn-success">Şikayeti Gönder</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

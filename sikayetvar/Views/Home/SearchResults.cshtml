@@ -1,0 +1,26 @@
+﻿@model List<sikayetvar.Models.Complaint>
+
+@{
+    ViewData["Title"] = "Arama Sonuçları";
+}
+
+<h2>Arama Sonuçları</h2>
+
+@if (Model != null && Model.Any())
+{
+    <div class="list-group">
+        @foreach (var complaint in Model)
+        {
+            <a href="@Url.Action("Details", "Complaints", new { id = complaint.Id })" class="list-group-item list-group-item-action">
+                <h5>@complaint.Title</h5>
+                <p>@complaint.Description</p>  @complaint.Description -->
+                <small class="text-muted">Tarih: @complaint.CreatedAt.ToString("dd.MM.yyyy")</small>
+            </a>
+        }
+    </div>
+}
+else
+{
+    <p>Aradığınız kriterlere uygun sonuç bulunamadı.</p>
+}
+

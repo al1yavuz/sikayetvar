@@ -1,0 +1,38 @@
+﻿@model List<sikayetvar.Models.Complaint>
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<div class="text-center my-5">
+    <h1 class="display-4"><strong>Çözüm için</strong></h1>
+    <h1 class="display-4">Şikayetvar</h1>
+    <form asp-controller="Complaints" asp-action="Search" method="get" class="d-flex justify-content-center mt-4">
+        <input type="text" name="query" class="form-control w-50" placeholder="Marka, model, ürün ara" required />
+        <button type="submit" class="btn btn-success ms-2">Ara</button>
+    </form>
+</div>
+
+<h4 class="mt-5 mb-3 text-center">Gündemdeki şikayetler</h4>
+
+<div class="scroll-container">
+    <div class="scroll-track">
+        @for (int i = 0; i < 3; i++)
+        {
+            foreach (var item in Model)
+            {
+                <a asp-controller="Complaints" asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none text-dark">
+                    <div class="scroll-item">
+                        <div class="card shadow-sm h-100 hover-shadow">
+                            <div class="card-body">
+                                <h6 class="card-title">@item.Title</h6>
+                                <p class="card-text text-muted">
+                                    @item.Description?.Substring(0, Math.Min(item.Description.Length, 80))...
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            }
+        }
+    </div>
+</div>

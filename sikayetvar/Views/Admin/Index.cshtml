@@ -1,0 +1,61 @@
+﻿@model IEnumerable<sikayetvar.Models.Complaint>
+@{
+    var onlyPending = (bool)(ViewData["OnlyPending"] ?? false);
+    ViewData["Title"] = onlyPending ? "Bekleyen Şikayetler" : "Tüm Şikayetler";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="mb-3">
+    <a asp-controller="Admin" asp-action="Index" class="btn btn-outline-primary">
+        @(!onlyPending ? "Tüm Şikayetler" : "Hepsini Gör")
+    </a>
+    <a asp-controller="Admin" asp-action="Index" asp-route-onlyPending="true" class="btn btn-outline-warning">
+        Bekleyen Şikayetler
+    </a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Başlık</th>
+            <th>Oluşturan</th>
+            <th>Oluşturma</th>
+            <th>Durum</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.Title</td>
+                <td>@c.User?.UserName</td>
+                <td>@c.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>
+                    @if (c.IsApproved)
+                    {
+                        <span class="badge bg-success">Onaylı</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Beklemede</span>
+                    }
+                </td>
+                <td>
+                    @if (!c.IsApproved)
+                    {
+                        <form asp-controller="Admin" asp-action="Approve" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@c.Id" />
+                            <button type="submit" class="btn btn-sm btn-success">Onayla</button>
+                        </form>
+                    }
+                    <form asp-controller="Admin" asp-action="Delete" method="post" class="d-inline">
+                        <input type="hidden" name="id" value="@c.Id" />
+                        <button type="submit" class="btn btn-sm btn-danger">Sil</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

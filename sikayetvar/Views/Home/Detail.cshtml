@@ -1,0 +1,32 @@
+﻿@* @model DetailViewModel
+@{
+    ViewData["Title"] = Model.Complaint.Title;
+}
+
+<h1>@Model.Complaint.Title</h1>
+<p><img src="@Model.Complaint.CoverImageUrl" /></p>
+@Html.Raw(Model.Complaint.Description)
+<hr />
+@if (Model.Complaint.CreatedDate == Model.Complaint.UpdateDate)
+{
+    <p>Bu yazı @Model.Complaint.CreatedDate.ToString("f") tarihinde yazıldı.</p>
+} else {
+    <p>Bu yazı @Model.Complaint.CreatedDate.ToString("f") tarihinde yazıldı ve en son @Model.Complaint.UpdateDate.ToString("f") tarihinde güncellendi.</p>
+}
+
+<hr />
+<h4>Yorumlar</h4>
+@if(Model.Comments.Count < 1) {
+    <p>Henüz yorum yapılmamış.</p>
+}
+@foreach(var comment in Model.Comments) {
+    <p>@comment.Body - <strong>@comment.Name</strong> (@comment.CreatedDate.ToString("f"))</p>
+}
+<hr />
+<h5>Yorum Ekle</h5>
+<form method="Complaint" autocomplete="off">
+    <p><input required type="text" name="Name" placeholder="Ad Soyad" /></p>
+    <p><input required type="email" name="Email" placeholder="E-Complainta Adresi" /></p>
+    <p><textarea rows="2" cols="50" placeholder="Yorum" name="Body"></textarea></p>
+    <p><button class="btn btn-primary">Ekle</button></p>
+</form> *@

@@ -1,0 +1,23 @@
+﻿@model sikayetvar.Models.Complaint
+@{
+    ViewData["Title"] = "Şikayet Sil";
+}
+
+<h2>Şikayet Sil</h2>
+
+<div class="alert alert-warning">
+    <strong>Dikkat!</strong> Aşağıdaki şikayet kalıcı olarak silinecektir. Devam etmek istiyor musunuz?
+</div>
+
+<div class="mb-3">
+    <strong>Başlık:</strong> @Model.Title
+</div>
+<div class="mb-3">
+    <strong>İçerik:</strong> @Model.Description
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Sil</button>
+    <a asp-action="Index" class="btn btn-secondary">İptal</a>
+</form>

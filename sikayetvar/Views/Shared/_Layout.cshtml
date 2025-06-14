@@ -1,0 +1,139 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using sikayetvar.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Şikayet Var</title>
+
+    <link rel="icon" href="https://seeklogo.com/images/S/sikayetvar-logo-34B2412D1B-seeklogo.com.png">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/sikayetvar.styles.css" asp-append-version="true" />
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                    <img src="https://seeklogo.com/images/S/sikayetvar-logo-34B2412D1B-seeklogo.com.png" height="40" class="me-2" />
+                    <strong>ŞikayetVar</strong>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Complaints" asp-action="Index">Şikayetler</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Complaints" asp-action="Create">Yeni Şikayet</a>
+                        </li>
+                    </ul>
+
+                    <form class="d-flex me-3" method="get" asp-controller="Complaints" asp-action="Search">
+                        <input class="form-control me-2" type="search" name="query" placeholder="Şikayet Ara..." required>
+                        <button class="btn btn-outline-primary" type="submit">Ara</button>
+                    </form>
+
+                    <ul class="navbar-nav">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    👤 @UserManager.GetUserName(User)
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Complaints" asp-action="MyComplaints">
+                                            Benim Şikayetlerim
+                                        </a>
+                                    </li>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Admin" asp-action="Index">
+                                                Admin Paneli
+                                            </a>
+                                        </li>
+                                    }
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <form asp-area="Identity" asp-page="/Account/Logout" method="post" class="dropdown-item p-0">
+                                            <button type="submit" class="btn w-100 text-start">Çıkış Yap</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Giriş Yap</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Kayıt Ol</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container py-4">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="bg-light border-top text-muted py-3 mt-auto">
+        <div class="container d-flex justify-content-between">
+            <span>&copy; 2025 - ŞikayetVar</span>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <span class="text-success">Giriş Yaptınız: @User.Identity.Name</span>
+            }
+        </div>
+    </footer>
+
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        const swiper = new Swiper('.mySwiper', {
+            slidesPerView: 3,
+            spaceBetween: 20,
+            loop: true,
+            speed: 6000,
+            autoplay: {
+                delay: 0,
+                disableOnInteraction: false,
+            },
+            freeMode: true,
+            freeModeMomentum: false,
+        });
+    </script>
+</body>
+</html>

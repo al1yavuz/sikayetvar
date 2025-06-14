@@ -1,0 +1,58 @@
+﻿@model sikayetvar.Models.Complaint
+@{
+    ViewData["Title"] = "Şikayet Düzenle";
+}
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data" class="shadow p-4 rounded bg-light">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label fw-bold">Başlık</label>
+        <input asp-for="Title" class="form-control" placeholder="Şikayet başlığını girin" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label fw-bold">Açıklama</label>
+        <textarea asp-for="Description" class="form-control" rows="5" placeholder="Şikayet detaylarını girin"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ImagePath))
+    {
+        <div class="mb-3">
+            <label class="form-label fw-bold">Mevcut Resim</label>
+            <div>
+                <img src="@Model.ImagePath" class="img-thumbnail mb-2" style="max-height: 150px;" />
+            </div>
+        </div>
+    }
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Yeni Resim</label>
+        <div class="input-group">
+            <input type="text" name="imageUrl" class="form-control" placeholder="Yeni resim URL'si (isteğe bağlı)" />
+            <input type="file" name="imageFile" class="form-control" />
+        </div>
+        <small class="form-text text-muted">Yeni resim yüklemezseniz mevcut resim korunur.</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Güncelle</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
