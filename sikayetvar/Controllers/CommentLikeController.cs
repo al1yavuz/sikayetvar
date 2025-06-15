@@ -26,12 +26,18 @@ namespace sikayetvar.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
                 return Unauthorized();
+           
+            var existingLike = await _context.CommentLikes
+                .FirstOrDefaultAsync(cl => cl.UserId == user.Id && cl.CommentId == commentId);
 
-            var alreadyLiked = await _context.CommentLikes
-                .AnyAsync(cl => cl.UserId == user.Id && cl.CommentId == commentId);
-
-            if (!alreadyLiked)
+            if (existingLike != null)
             {
+                
+                _context.CommentLikes.Remove(existingLike);
+            }
+            else
+            {
+                
                 var like = new CommentLike
                 {
                     UserId = user.Id,
@@ -39,8 +45,8 @@ namespace sikayetvar.Controllers
                 };
 
                 _context.CommentLikes.Add(like);
-                await _context.SaveChangesAsync();
 
+                
                 var comment = await _context.Comments.Include(c => c.User).FirstOrDefaultAsync(c => c.Id == commentId);
 
                 if (comment != null && comment.UserId != user.Id)
@@ -52,8 +58,9 @@ namespace sikayetvar.Controllers
                         type: "begenme"
                     );
                 }
-
             }
+
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("Details", "Complaints", new { id = (await _context.Comments.FindAsync(commentId))?.ComplaintId });
         }

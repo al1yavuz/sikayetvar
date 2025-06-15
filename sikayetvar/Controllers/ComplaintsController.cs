@@ -103,14 +103,26 @@ namespace sikayetvar.Controllers
                 .Include(c => c.User)
                 .Include(c => c.Comments)
                     .ThenInclude(comment => comment.User)
+                .Include(c => c.Comments)
+                    .ThenInclude(comment => comment.Likes)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (complaint == null)
                 return NotFound();
 
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            foreach (var comment in complaint.Comments)
+            {
+                comment.IsLikedByCurrentUser = comment.Likes.Any(like => like.UserId == currentUser.Id);
+            }
+
             ViewBag.NewComment = new Comment { ComplaintId = complaint.Id };
+
             return View(complaint);
         }
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

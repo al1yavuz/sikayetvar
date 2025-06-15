@@ -24,5 +24,10 @@ namespace sikayetvar.Models
 
         [ForeignKey("ComplaintId")]
         public Complaint Complaint { get; set; }
+        public ICollection<CommentLike> Likes { get; set; } = new List<CommentLike>();
+        [NotMapped]
+        public bool IsLikedByCurrentUser { get; set; }
+
+
     }
 }

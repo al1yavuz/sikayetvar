@@ -67,20 +67,30 @@
         {
             <div class="border rounded p-3 mb-2">
                 <p class="mb-1">@comment.Text</p>
-                <div class="d-flex align-items-center">
-                    @if (!string.IsNullOrEmpty(comment.User?.ProfileImageUrl))
-                    {
-                        <img src="@comment.User.ProfileImageUrl" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;" />
-                    }
-                    <small class="text-muted">
-                        Yazan: <strong>@comment.User?.FirstName @comment.User?.LastName</strong> -
-                        @comment.CreatedAt.ToString("dd.MM.yyyy HH:mm")
-                    </small>
-                    <form asp-controller="CommentLike" asp-action="Like" method="post" class="d-inline">
-                        <input type="hidden" name="commentId" value="@comment.Id" />
-                        <button type="submit" class="btn btn-sm btn-outline-primary">👍 Beğen</button>
-                    </form>
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        @if (!string.IsNullOrEmpty(comment.User?.ProfileImageUrl))
+                        {
+                            <img src="@comment.User.ProfileImageUrl" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;" />
+                        }
+                        <small class="text-muted">
+                            Yazan: <strong>@comment.User?.FirstName @comment.User?.LastName</strong> -
+                            @comment.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+                        </small>
+                    </div>
 
+                    <div class="d-flex align-items-center">
+                        <form asp-controller="CommentLike" asp-action="Like" method="post" class="d-inline me-2">
+                            <input type="hidden" name="commentId" value="@comment.Id" />
+                            <button type="submit" class="btn btn-sm @(comment.IsLikedByCurrentUser ? "btn-secondary" : "btn-outline-primary")">
+                                @(comment.IsLikedByCurrentUser ? "👍 Beğendin" : "👍 Beğen")
+                            </button>
+                        </form>
+
+                        <span class="text-muted me-2">
+                            <i class="bi bi-hand-thumbs-up"></i> @comment.Likes?.Count ?? 0
+                        </span>
+                    </div>
                 </div>
             </div>
         }
