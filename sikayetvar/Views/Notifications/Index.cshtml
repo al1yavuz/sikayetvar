@@ -1,0 +1,27 @@
+﻿@model List<sikayetvar.Models.Notification>
+@{
+    ViewData["Title"] = "Bildirimler";
+}
+
+<h2 class="mb-4">Bildirimler</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Henüz bildiriminiz yok.</div>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var notification in Model)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center @(notification.IsRead ? "text-muted" : "fw-bold")">
+                <div>
+                    <a href="@notification.Url" class="text-decoration-none">
+                        @notification.Message
+                    </a><br />
+                    <small class="text-muted">@notification.CreatedAt.ToString("dd MMM yyyy HH:mm")</small>
+                </div>
+            </li>
+        }
+    </ul>
+}

@@ -1,23 +1,26 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using sikayetvar.Data;
 using sikayetvar.Models;
+using sikayetvar.Services;
 using System.Threading.Tasks;
 
 namespace sikayetvar.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class AdminController : Controller
+    public class AdminController : BaseController
     {
-        private readonly AppDbContext _context;
+        private readonly NotificationService _notificationService;
 
-        public AdminController(AppDbContext context)
+        public AdminController(UserManager<ApplicationUser> userManager, AppDbContext context, NotificationService notificationService)
+            : base(userManager, context)
         {
-            _context = context;
+            _notificationService = notificationService;
         }
 
-        
+
         public async Task<IActionResult> Index(bool onlyPending = false)
         {
             var query = _context.Complaints
@@ -35,7 +38,7 @@ namespace sikayetvar.Controllers
             return View(complaints);
         }
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Approve(int id)
@@ -45,12 +48,18 @@ namespace sikayetvar.Controllers
             {
                 complaint.IsApproved = true;
                 complaint.ApprovalDate = DateTime.Now;
+                await _notificationService.CreateNotificationAsync(
+                    complaint.UserId,
+                    $"'{complaint.Title}' başlıklı şikayetiniz onaylandı.",
+                    $"/Complaints/Details/{complaint.Id}",
+                    "onay"
+                );
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index), new { onlyPending = true });
         }
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)

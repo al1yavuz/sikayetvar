@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using sikayetvar.Data;
 using System.Linq;
@@ -6,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace sikayetvar.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly AppDbContext _context;
 
-        public HomeController(AppDbContext context)
+        public HomeController(AppDbContext context, UserManager<ApplicationUser> userManager)
+            : base(userManager, context)
         {
             _context = context;
         }

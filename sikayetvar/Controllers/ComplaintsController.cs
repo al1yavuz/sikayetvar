@@ -6,19 +6,19 @@ using sikayetvar.Data;
 using System.Security.Claims;
 using sikayetvar.Models;
 using System.Threading.Tasks;
+using sikayetvar.Services;
 
 namespace sikayetvar.Controllers
 {
     [Authorize]
-    public class ComplaintsController : Controller
+    public class ComplaintsController : BaseController
     {
-        private readonly AppDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly NotificationService _notificationService;
 
-        public ComplaintsController(AppDbContext context, UserManager<ApplicationUser> userManager)
+        public ComplaintsController(AppDbContext context, UserManager<ApplicationUser> userManager, NotificationService notificationService)
+            : base(userManager, context)
         {
-            _context = context;
-            _userManager = userManager;
+            _notificationService = notificationService;
         }
 
         [AllowAnonymous]
@@ -127,6 +127,18 @@ namespace sikayetvar.Controllers
 
                 _context.Comments.Add(comment);
                 await _context.SaveChangesAsync();
+                var currentUser = await _userManager.GetUserAsync(User);
+                var complaint = await _context.Complaints.Include(c => c.User).FirstOrDefaultAsync(c => c.Id == comment.ComplaintId);
+
+                if (complaint != null && complaint.UserId != currentUser.Id)
+                {
+                    await _notificationService.CreateNotificationAsync(
+                        userId: complaint.UserId,
+                        message: $"{currentUser.FirstName} {currentUser.LastName} şikayetinize yorum yaptı.",
+                        url: $"/Complaints/Details/{complaint.Id}",
+                        type: "comment"
+                    );
+                }
             }
 
             return RedirectToAction(nameof(Details), new { id = comment.ComplaintId });

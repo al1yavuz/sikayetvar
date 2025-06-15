@@ -76,6 +76,11 @@
                         Yazan: <strong>@comment.User?.FirstName @comment.User?.LastName</strong> -
                         @comment.CreatedAt.ToString("dd.MM.yyyy HH:mm")
                     </small>
+                    <form asp-controller="CommentLike" asp-action="Like" method="post" class="d-inline">
+                        <input type="hidden" name="commentId" value="@comment.Id" />
+                        <button type="submit" class="btn btn-sm btn-outline-primary">👍 Beğen</button>
+                    </form>
+
                 </div>
             </div>
         }
